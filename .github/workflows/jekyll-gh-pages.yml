@@ -35,6 +35,16 @@ jobs:
         with:
           source: ./
           destination: ./_site
+
+      # Ensure index.html is present in ./_site for plain static sites.
+      # This copies root index.html into _site only if the build didn't produce one.
+      - name: Ensure _site has index.html (for static sites)
+        run: |
+          mkdir -p ./_site
+          if [ ! -f ./_site/index.html ] && [ -f ./index.html ]; then
+            cp ./index.html ./_site/
+          fi
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
 
